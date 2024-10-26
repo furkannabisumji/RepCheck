@@ -1,0 +1,3 @@
+[submodule "rollup\nitro-contracts"] 
+  path = rollup\nitro-contracts 
+  url = https://github.com/availproject/nitro-contracts.git
