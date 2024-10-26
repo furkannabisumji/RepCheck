@@ -16,9 +16,9 @@ if (!projectId) {
 
 // Set up metadata
 const metadata = {
-  name: 'appkit-example',
-  description: 'AppKit Example',
-  url: 'https//reputrack5.vercel.app', // origin must match your domain & subdomain
+  name: 'RepCheck',
+  description: 'RepCheck',
+  url: 'https//repcheck.vercel.app', // origin must match your domain & subdomain
   icons: ['https://avatars.githubusercontent.com/u/179229932']
 }
 
