@@ -1,8 +1,13 @@
 # RepCheck: Blockchain-Based Reputation System
+![image](https://github.com/user-attachments/assets/0ca40434-889f-429d-95c3-ae0baef1293f)
+
 
 RepTracker is an innovative reputation tracking system that automatically monitors and rewards user activities on the blockchain using Quicknode's cutting-edge Streams and Functions technologies. The system assigns reputation points to users based on their on-chain activities, creating a transparent and automated reputation mechanism.
 
 ## Features
+
+![image](https://github.com/user-attachments/assets/b2cb4fd8-e058-4cab-a139-43a1a983d9f0)
+
 
 - **Automated Transaction Monitoring**: Leverages Quicknode Streams to track registered users' blockchain activities in real-time
 - **Smart Point Attribution**: Uses Quicknode Functions to process transactions and award points automatically
