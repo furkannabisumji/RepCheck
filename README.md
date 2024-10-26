@@ -13,7 +13,7 @@ RepTracker is an innovative reputation tracking system that automatically monito
 
 ## Technical Architecture
 
-![image](https://github.com/user-attachments/assets/d87ebb04-6cce-4f5b-8391-36cd72bedbb0)
+![image](https://github.com/user-attachments/assets/c8d635ee-6941-4701-9ed5-2f0f41cc5591)
 
 
 ### Smart Contract
