@@ -79,7 +79,7 @@ const Home = () => {
                       functionName: "register",
                     })
                   }
-                  className="bg-white hover:bg-gray-300 text-darkblue font-bold py-2 px-4 rounded w-full"
+                  className="bg-white hover:bg-gray-300 text-blue-800 font-bold py-2 px-4 rounded w-full"
                   disabled={isPending}
                 >
                   {isPending ? "Registering..." : "Register"}
