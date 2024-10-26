@@ -13,7 +13,8 @@ const Home = () => {
     functionName: 'isUserRegistered',
     args: [address],
   }) as { data: boolean | undefined };
-
+ 
+  console.log({isRegistered});
   const { data: points } = useReadContract({
     abi: config.abi,
     address: `0x${config.address}`,
