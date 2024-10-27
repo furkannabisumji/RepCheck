@@ -431,15 +431,12 @@ async function main(params) {
 
       let results = JSON.parse(await getAllRegisteredUsers());
 
-
       let results2 = results.map((v) => v.toLowerCase());
       const combinedData = [
         ...params?.data?.borrowers, // Spread borrowers array
         ...params?.data?.suppliers, // Spread suppliers array
         ...params?.data?.repayers, // Spread repayers array
       ];
-
-     
 
       // Loop through each object (borrower, supplier, or repayer)
       for (const entity of combinedData) {
@@ -481,7 +478,7 @@ async function main(params) {
           };
 
           // Call the webhook
-          await sendToWebhook(params);
+          await sendToWebhook({ params });
 
           return {
             status: "Data processed, points awarded, and sent to webhook",
