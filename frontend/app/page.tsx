@@ -1,6 +1,6 @@
 "use client";
 
-import { useAccount, useReadContract, useWriteContract } from "wagmi";
+import { useAccount, useReadContract, useWriteContract, useChainId } from "wagmi";
 import { useCallback, useEffect, useState } from "react";
 import config from "@/config.json";
 import pyusdAbi from "@/pyusdAbi.json"
@@ -36,11 +36,16 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children, title }) => {
 const Home = () => {
   const { address, isConnected } = useAccount();
   const { writeContract, isPending } = useWriteContract();
+  const chainId = useChainId(); // Get the current chain ID using the hook
   const [depositAmount, setDepositAmount] = useState("");
   const [isApproveLoading, setIsApproveLoading] = useState(false);
   const [isDepositLoading, setIsDepositLoading] = useState(false);
   const [isDepositModalOpen, setIsDepositModalOpen] = useState(false);
   const [isLevelModalOpen, setIsLevelModalOpen] = useState(false);
+  const [time, setTime] = useState(new Date());
+  
+  const isSepolia = chainId === 11155111;
+
 
   // Contract reads
   const { data: isRegistered, refetch: refetchRegistration } = useReadContract({
@@ -265,40 +270,54 @@ const Home = () => {
             {isRegistered ? (
               <div className="space-y-4">
                 <div className="border border-white rounded-xl p-6 bg-blue-900 shadow-lg">
-                  <div className="flex justify-between items-center mb-4">
-                    <p className="text-white text-xl">Reputation Points:&nbsp;</p>
-                    <p className="text-white text-2xl font-bold">
-                      {displayPoints}
-                    </p>
-                  </div>
+                  { !isSepolia && (
+                    <div className="flex justify-between items-center mb-4">
+                      <p className="text-white text-xl">Reputation Points:&nbsp;</p>
+                      <p className="text-white text-2xl font-bold">
+                        {displayPoints}
+                      </p>
+                    </div>
+                  )}
                   <div className="flex gap-4">
-                    <button
-                      onClick={() => setIsLevelModalOpen(true)}
-                      className="bg-white hover:bg-gray-300 text-blue-800 font-bold py-2 px-4 rounded flex-1 transition-colors"
-                    >
-                     Level Check
-                    </button>
-                    <button
-                      onClick={() => setIsDepositModalOpen(true)}
-                      className="bg-white hover:bg-gray-300 text-blue-800 font-bold py-2 px-4 rounded flex-1 transition-colors relative flex items-center justify-center"
-                    >
-                      <img src="https://assets.coingecko.com/coins/images/31212/large/PYUSD_Logo_%282%29.png?1696530039" alt="Deposit Icon" className="w-6 h-6 mr-2" />
-                      Deposit
-                    </button>
+                    { isSepolia ? (
+                      <>
+                        <button
+                          onClick={() => setIsLevelModalOpen(true)}
+                          className="bg-white hover:bg-gray-300 text-blue-800 font-bold py-2 px-4 rounded flex-1 transition-colors"
+                        >
+                         Level Check
+                        </button>
+                        <button
+                          onClick={() => setIsDepositModalOpen(true)}
+                          className="bg-white hover:bg-gray-300 text-blue-800 font-bold py-2 px-4 rounded flex-1 transition-colors relative flex items-center justify-center"
+                        >
+                          <img src="https://assets.coingecko.com/coins/images/31212/large/PYUSD_Logo_%282%29.png?1696530039" alt="Deposit Icon" className="w-8 h-8 mr-2" />
+                          Deposit
+                        </button>
+                      </>
+                    ) : null}
                   </div>
                 </div>
               </div>
             ) : (
-              <div className="border border-white rounded-xl p-8 bg-blue-900 shadow-lg space-y-6">
-                <p className="text-white text-2xl">You are not registered 🥺</p>
-                <button
-                  onClick={handleRegister}
-                  className="bg-white hover:bg-gray-300 text-blue-800 font-bold py-2 px-4 rounded w-full transition-colors"
-                  disabled={isPending}
-                >
-                  {isPending ? "Registering..." : "Register"}
-                </button>
-              </div>
+              isSepolia ? (
+                (
+                  <div className="border border-white rounded-xl p-8 bg-blue-900 shadow-lg space-y-6">
+                    <p className="text-white text-2xl">Connect to the RepChain for registration</p>
+                   
+                  </div>
+                )              ) : (
+                <div className="border border-white rounded-xl p-8 bg-blue-900 shadow-lg space-y-6">
+                  <p className="text-white text-2xl">You are not registered 🥺</p>
+                  <button
+                    onClick={handleRegister}
+                    className="bg-white hover:bg-gray-300 text-blue-800 font-bold py-2 px-4 rounded w-full transition-colors"
+                    disabled={isPending}
+                  >
+                    {isPending ? "Registering..." : "Register"}
+                  </button>
+                </div>
+              )
             )}
           </div>
         )}
