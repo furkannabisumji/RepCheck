@@ -55,7 +55,7 @@ const ArchitecturePage = () => {
             transition={{ delay: 0.2 }}
             className="text-lg text-blue-200 max-w-3xl mx-auto"
           >
-            Discover how RepCheck harnesses Quicknode's powerful infrastructure to create a 
+            Discover how RepCheck harnesses Quicknode&apos;s powerful infrastructure to create a 
             transparent and efficient on-chain reputation system
           </motion.p>
         </div>
@@ -163,7 +163,7 @@ const ArchitecturePage = () => {
     <div className="bg-blue-800/30 backdrop-blur-sm border border-blue-400/30 rounded-xl p-6">
       <h3 className="text-xl font-bold text-white mb-4">Avail Powered Rollup</h3>
       <div className="space-y-3 text-blue-200">
-        <p>Our application-specific rollup leverages Avail's data availability layer to provide:</p>
+        <p>Our application-specific rollup leverages Avail&apos;s data availability layer to provide:</p>
         <ul className="list-disc pl-5 space-y-2">
           <li>Dedicated blockchain infrastructure for reputation tracking</li>
           <li>High throughput with minimal latency</li>
