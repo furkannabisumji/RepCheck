@@ -47,6 +47,9 @@ The system is built on a Solidity smart contract that handles:
    - Reads of PYUSD Escrow for multipliers
    - Interacts with the smart contract to award points
 
+![Screenshot_29-10-2024_2257_reponchain com](https://github.com/user-attachments/assets/a501f63f-e4ef-4e91-97ec-3f9c2db93fcb)
+
+
 ### Appchain integration for speed, efficiency and security
 
 Repchain - https://explorer.reponchain.com/
