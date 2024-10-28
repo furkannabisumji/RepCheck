@@ -17,7 +17,7 @@ if (!projectId) {
 // Set up metadata
 const metadata = {
   name: 'RepCheck',
-  description: 'RepCheck',
+  description: 'Your reputation OnChain',
   url: 'https//repcheck.vercel.app', // origin must match your domain & subdomain
   icons: ['https://avatars.githubusercontent.com/u/179229932']
 }

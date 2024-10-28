@@ -8,8 +8,8 @@ import { headers } from 'next/headers' // added
 import ContextProvider from '@/context'
 
 export const metadata: Metadata = {
-  title: 'AppKit Example App',
-  description: 'Powered by Reown'
+  title: 'RepCheck',
+  description: 'Your Reputation OnChain'
 }
 
 export default async function RootLayout({
