@@ -2,7 +2,6 @@ const { Web3 } = require("web3");
 const axios = require("axios");
 const ethers = require("ethers");
 
-// Define the contract ABI (Application Binary Interface)
 const abi = [
   {
     inputs: [
@@ -316,7 +315,209 @@ let provider = new ethers.JsonRpcProvider(
   "https://radial-red-breeze.ethereum-sepolia.quiknode.pro/b0889c7d0a35d0f4df1a4ad8d36c4dc7341ed119"
 );
 
+
+const pyusdEscrowABI = [
+	{
+		inputs: [
+			{
+				internalType: "address",
+				name: "_token",
+				type: "address"
+			}
+		],
+		stateMutability: "nonpayable",
+		type: "constructor"
+	},
+	{
+		anonymous: false,
+		inputs: [
+			{
+				indexed: true,
+				internalType: "address",
+				name: "user",
+				type: "address"
+			},
+			{
+				indexed: false,
+				internalType: "uint256",
+				name: "amount",
+				type: "uint256"
+			}
+		],
+		name: "Deposited",
+		type: "event"
+	},
+	{
+		anonymous: false,
+		inputs: [
+			{
+				indexed: true,
+				internalType: "address",
+				name: "user",
+				type: "address"
+			},
+			{
+				indexed: false,
+				internalType: "uint256",
+				name: "amount",
+				type: "uint256"
+			}
+		],
+		name: "Withdrawn",
+		type: "event"
+	},
+	{
+		inputs: [
+			{
+				internalType: "address",
+				name: "",
+				type: "address"
+			}
+		],
+		name: "balances",
+		outputs: [
+			{
+				internalType: "uint256",
+				name: "",
+				type: "uint256"
+			}
+		],
+		stateMutability: "view",
+		type: "function"
+	},
+	{
+		inputs: [
+			{
+				internalType: "address",
+				name: "user",
+				type: "address"
+			}
+		],
+		name: "checkAllowance",
+		outputs: [
+			{
+				internalType: "uint256",
+				name: "",
+				type: "uint256"
+			}
+		],
+		stateMutability: "view",
+		type: "function"
+	},
+	{
+		inputs: [
+			{
+				internalType: "uint256",
+				name: "amount",
+				type: "uint256"
+			}
+		],
+		name: "deposit",
+		outputs: [],
+		stateMutability: "nonpayable",
+		type: "function"
+	},
+	{
+		inputs: [
+			{
+				internalType: "address",
+				name: "user",
+				type: "address"
+			}
+		],
+		name: "getBalance",
+		outputs: [
+			{
+				internalType: "uint256",
+				name: "",
+				type: "uint256"
+			}
+		],
+		stateMutability: "view",
+		type: "function"
+	},
+	{
+		inputs: [
+			{
+				internalType: "address",
+				name: "user",
+				type: "address"
+			}
+		],
+		name: "getLevel",
+		outputs: [
+			{
+				internalType: "uint256",
+				name: "",
+				type: "uint256"
+			}
+		],
+		stateMutability: "view",
+		type: "function"
+	},
+	{
+		inputs: [
+			{
+				internalType: "address",
+				name: "user",
+				type: "address"
+			}
+		],
+		name: "getPYUSDBalance",
+		outputs: [
+			{
+				internalType: "uint256",
+				name: "",
+				type: "uint256"
+			}
+		],
+		stateMutability: "view",
+		type: "function"
+	},
+	{
+		inputs: [],
+		name: "getTotalPYUSDSupply",
+		outputs: [
+			{
+				internalType: "uint256",
+				name: "",
+				type: "uint256"
+			}
+		],
+		stateMutability: "view",
+		type: "function"
+	},
+	{
+		inputs: [],
+		name: "pyusd",
+		outputs: [
+			{
+				internalType: "contract IPYUSD",
+				name: "",
+				type: "address"
+			}
+		],
+		stateMutability: "view",
+		type: "function"
+	},
+	{
+		inputs: [
+			{
+				internalType: "uint256",
+				name: "amount",
+				type: "uint256"
+			}
+		],
+		name: "withdraw",
+		outputs: [],
+		stateMutability: "nonpayable",
+		type: "function"
+	}
+]
+
+
 const contractAddress = "0x03AdA6F4BaE36d152Fd33A3a11CA9E1feDEEeCbc";
+const pyusdContractAddress = "0xB1CC11d6197751BEbEAd9499910dE267B0A19Ed0";
 
 const wallet = new ethers.Wallet(
   "d9bb5f232bac6821233db42d4735acb56692052202eb0f439acf127d693dc621",
@@ -328,6 +529,14 @@ const repTrackerContractWithAdmin = new ethers.Contract(
   abi,
   wallet
 );
+
+const pyUSDContract = new ethers.Contract(
+  pyusdContractAddress,
+  pyusdEscrowABI,
+  wallet
+);
+
+let MULTIPLIER = 1;
 
 async function setupWeb3() {
   web3 = new Web3(BASE_QUICKNODE_URL);
@@ -356,6 +565,30 @@ async function getAllRegisteredUsers() {
   }
 }
 
+async function getLevel(user) {
+  try {
+    // Use the already instantiated global contract instance
+    // Call the getLevel function from the contract with the address
+    let level
+    try{
+    level = Number(await pyUSDContract.getLevel(user));
+    }
+    catch(er){
+      console.log(er)
+    }
+
+    
+     // Return an appropriate response with level
+    return level;
+  } catch (error) {
+    console.error("Error fetching level:", error);
+    return {
+      status: "Error fetching level",
+      error: error.message
+    };
+  }
+}
+
 async function sendToWebhook(data) {
   try {
     await axios.post(
@@ -373,7 +606,6 @@ async function main(params) {
     //   return {
     //     status: 'Data processed and sent to webhook'
     // };
-
     if (params?.data?.result) {
       try {
         let results = JSON.parse(await getAllRegisteredUsers());
@@ -388,9 +620,12 @@ async function main(params) {
 
         for (let i = 0; i < params.data.result.length; i++) {
           if (results2.includes(params.data.result[i].fromUser)) {
+            
+            MULTIPLIER = await getLevel(params.data.result[i].fromUser);            
+
             await repTrackerContractWithAdmin.awardPoints(
               params.data.result[i].fromUser,
-              20,
+              MULTIPLIER * 20,
               "Uniswap Swap Reputation"
             );
 
@@ -431,12 +666,15 @@ async function main(params) {
 
       let results = JSON.parse(await getAllRegisteredUsers());
 
+
       let results2 = results.map((v) => v.toLowerCase());
       const combinedData = [
         ...params?.data?.borrowers, // Spread borrowers array
         ...params?.data?.suppliers, // Spread suppliers array
         ...params?.data?.repayers, // Spread repayers array
       ];
+
+     
 
       // Loop through each object (borrower, supplier, or repayer)
       for (const entity of combinedData) {
@@ -445,27 +683,29 @@ async function main(params) {
         // Check if the borrower (or supplier, repayer) exists in results2
         if (results2.includes(borrower)) {
           // Award points (replace with appropriate logic)
+          MULTIPLIER = await getLevel(borrower);
+
 
           if (switchVar == 0) {
             // If there are borrow transactions, award points for borrowing
-
+            
             await repTrackerContractWithAdmin.awardPoints(
-              borrower, // Borrower's address
-              10, // Points to award
+               borrower, 
+               MULTIPLIER * 10, // Points to award
               "Aave Borrow Transaction Reputation: Borrow" // Description for borrowing
             );
           } else if (switchVar == 1) {
             // If there are supply transactions, award points for supplying
             await repTrackerContractWithAdmin.awardPoints(
-              borrower, // Supplier's address (same field name as borrower in your data)
-              200, // Points to award
+              borrower, 
+              MULTIPLIER * 200, // Points to award
               "Aave Supply Transaction Reputation: Supply" // Description for supplying
             );
           } else if (switchVar == 2) {
             // If there are repay transactions, award points for repaying
             await repTrackerContractWithAdmin.awardPoints(
-              borrower, // Repayer's address
-              100, // Points to award
+               borrower, // Repayer's address
+              MULTIPLIER * 100, // Points to award
               "Aave Repay Transaction Reputation: Repay" // Description for repaying
             );
           }
@@ -478,7 +718,7 @@ async function main(params) {
           };
 
           // Call the webhook
-          await sendToWebhook({ params });
+          await sendToWebhook({params});
 
           return {
             status: "Data processed, points awarded, and sent to webhook",

@@ -14,8 +14,6 @@ const Home = () => {
     address: `0x${config.address}`,
     functionName: "isUserRegistered",
     args: [address],
-    watch: true, // Enable real-time updates
-    enabled: !!address, // Only query when address exists
   }) as { data: boolean | undefined, refetch: () => void };
 
   const { data: points, refetch: refetchPoints } = useReadContract({
@@ -23,8 +21,6 @@ const Home = () => {
     address: `0x${config.address}`,
     functionName: "getPoints",
     args: [address],
-    watch: true, // Enable real-time updates
-    enabled: !!address && !!isRegistered, // Only query when registered
   }) as { data: bigint | undefined, refetch: () => void };
 
   const displayPoints = points ? points.toString() : "0";
