@@ -7,7 +7,14 @@ import pyusdAbi from "@/pyusdAbi.json"
 import LevitatingLogo from "./logo";
 import Link from "next/link";
 
-const Modal = ({ isOpen, onClose, children, title }) => {
+interface ModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  children: React.ReactNode;
+  title: string;
+}
+
+const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children, title }) => {
   if (!isOpen) return null;
 
   return (
@@ -62,7 +69,6 @@ const Home = () => {
     address: "0xB1CC11d6197751BEbEAd9499910dE267B0A19Ed0",
     functionName: "checkAllowance",
     args: [address],
-    enabled: !!address, // Only run when address is available
   }) as { data: bigint | undefined, refetch: () => void };
 
   const displayPoints = points ? points.toString() : "0";
