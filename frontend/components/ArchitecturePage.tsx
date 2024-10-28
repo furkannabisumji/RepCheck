@@ -10,7 +10,7 @@ const ArchitecturePage = () => {
       <div className="max-w-7xl mx-auto mb-12">
         <h1 className="text-4xl font-bold mb-4">System Architecture</h1>
         <p className="text-lg text-gray-300">
-          Explore how RepCheck leverages Quicknode's cutting-edge technologies to create a next-generation reputation tracking system
+          Explore how RepCheck leverages Quicknode&apos;s cutting-edge technologies to create a next-generation reputation tracking system
         </p>
       </div>
 
