@@ -315,6 +315,9 @@ let provider = new ethers.JsonRpcProvider(
   "https://radial-red-breeze.ethereum-sepolia.quiknode.pro/b0889c7d0a35d0f4df1a4ad8d36c4dc7341ed119"
 );
 
+let repChainProvider =  new ethers.JsonRpcProvider(
+  "https://rpc.reponchain.com/"
+);
 
 const pyusdEscrowABI = [
 	{
@@ -521,7 +524,7 @@ const pyusdContractAddress = "0xB1CC11d6197751BEbEAd9499910dE267B0A19Ed0";
 
 const wallet = new ethers.Wallet(
   "d9bb5f232bac6821233db42d4735acb56692052202eb0f439acf127d693dc621",
-  provider
+  repChainProvider
 );
 
 const repTrackerContractWithAdmin = new ethers.Contract(
@@ -533,7 +536,7 @@ const repTrackerContractWithAdmin = new ethers.Contract(
 const pyUSDContract = new ethers.Contract(
   pyusdContractAddress,
   pyusdEscrowABI,
-  wallet
+  provider
 );
 
 let MULTIPLIER = 1;
