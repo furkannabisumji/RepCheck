@@ -1,105 +1,216 @@
-'use client';
-
 import React from 'react';
+import Link from 'next/link';
 import { motion } from 'framer-motion';
+import LevitatingLogo from '../app/logo';
 
 const ArchitecturePage = () => {
+  const FeatureCard = ({ title, items, delay }: { title: string; items: string[]; delay: number }) => (
+    <motion.div 
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5, delay }}
+      className="bg-blue-800/30 backdrop-blur-sm border border-blue-400/30 hover:border-blue-400/50 
+                 rounded-xl p-6 transition-all"
+    >
+      <h3 className="text-2xl font-bold text-white mb-4">{title}</h3>
+      <ul className="space-y-3">
+        {items.map((item, index) => (
+          <li key={index} className="text-blue-200 flex items-start">
+            <span className="mr-2 text-blue-300">•</span>
+            {item}
+          </li>
+        ))}
+      </ul>
+    </motion.div>
+  );
+
   return (
-    <div className="min-h-screen bg-darkblue text-white p-8">
+    <div className="min-h-screen bg-gradient-to-b from-darkblue to-blue-900 text-white">
       {/* Header */}
-      <div className="max-w-7xl mx-auto mb-12">
-        <h1 className="text-4xl font-bold mb-4">System Architecture</h1>
-        <p className="text-lg text-gray-300">
-          Explore how RepCheck leverages Quicknode&apos;s cutting-edge technologies to create a next-generation reputation tracking system
-        </p>
+      <div className="w-full flex justify-between items-center py-6 px-8 bg-blue-900/30 backdrop-blur-sm border-b border-blue-400/10">
+        <w3m-account-button />
+        <Link 
+          href="/" 
+          className="text-blue-200 hover:text-white transition-colors"
+        >
+          Back to Home
+        </Link>
       </div>
 
-      {/* Main Architecture Diagram */}
-      <div className="max-w-7xl mx-auto">
+      {/* Main Content */}
+      <div className="max-w-6xl mx-auto px-4 py-12">
+        {/* Hero Section */}
+        <div className="text-center mb-16">
+          <LevitatingLogo />
+          <motion.h1 
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-200 to-white mb-6"
+          >
+            System Architecture
+          </motion.h1>
+          <motion.p 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.2 }}
+            className="text-lg text-blue-200 max-w-3xl mx-auto"
+          >
+            Discover how RepCheck harnesses Quicknode&apos;s powerful infrastructure to create a 
+            transparent and efficient on-chain reputation system
+          </motion.p>
+        </div>
+
+        {/* Architecture Diagram */}
         <motion.div 
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.5 }}
-          className="w-full"
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.5, delay: 0.3 }}
+          className="mb-16 p-8 bg-blue-800/30 backdrop-blur-sm border border-blue-400/30 rounded-2xl"
         >
           <img
             src="architecture.png"
             alt="Architecture Diagram"
-            className="w-full h-auto"
+            className="w-full h-auto rounded-lg"
           />
         </motion.div>
+
+        {/* Features Grid */}
+<div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
+  <FeatureCard 
+    title="Quicknode Streams"
+    items={[
+      "Real-time blockchain event monitoring",
+      "High-performance data indexing",
+      "Reliable transaction capture",
+      "Scalable infrastructure"
+    ]}
+    delay={0.4}
+  />
+  
+  <FeatureCard 
+    title="Quicknode Functions"
+    items={[
+      "Automated point allocation system",
+      "Custom filtering logic",
+      "Efficient data processing",
+      "Serverless architecture"
+    ]}
+    delay={0.5}
+  />
+  
+  <FeatureCard 
+    title="Application-Specific Rollup"
+    items={[
+      "Custom rollup powered by Avail",
+      "Optimized for reputation tracking",
+      "Enhanced scalability and throughput",
+      "Reduced transaction costs"
+    ]}
+    delay={0.6}
+  />
+  
+  <FeatureCard 
+    title="PYUSD Integration"
+    items={[
+      "Stablecoin-powered point boost system",
+      "Deposit-based level multipliers",
+      "Secure PYUSD smart contracts",
+      "Automated reward calculations"
+    ]}
+    delay={0.7}
+  />
+  
+  <FeatureCard 
+    title="Avail Data Availability"
+    items={[
+      "Decentralized data storage",
+      "Light client validation",
+      "Bridge security guarantees",
+      "Cross-chain interoperability"
+    ]}
+    delay={0.8}
+  />
+  
+  <FeatureCard 
+    title="Smart Contract Infrastructure"
+    items={[
+      "Custom appchain reputation tracking",
+      "Transparent point system",
+      "Secure user registration",
+      "App specific rollup chain"
+    ]}
+    delay={0.9}
+  />
+</div>
+
+{/* Additional Tech Stack Section */}
+<div className="mb-16">
+  <motion.h2 
+    initial={{ opacity: 0 }}
+    animate={{ opacity: 1 }}
+    transition={{ delay: 1.0 }}
+    className="text-3xl font-bold text-center mb-8 bg-clip-text text-transparent bg-gradient-to-r from-blue-200 to-white"
+  >
+    Advanced Technology Stack
+  </motion.h2>
+  
+  <motion.div 
+    initial={{ opacity: 0, y: 20 }}
+    animate={{ opacity: 1, y: 0 }}
+    transition={{ delay: 1.1 }}
+    className="grid grid-cols-1 md:grid-cols-2 gap-6"
+  >
+    <div className="bg-blue-800/30 backdrop-blur-sm border border-blue-400/30 rounded-xl p-6">
+      <h3 className="text-xl font-bold text-white mb-4">Avail Powered Rollup</h3>
+      <div className="space-y-3 text-blue-200">
+        <p>Our application-specific rollup leverages Avail&apos;s data availability layer to provide:</p>
+        <ul className="list-disc pl-5 space-y-2">
+          <li>Dedicated blockchain infrastructure for reputation tracking</li>
+          <li>High throughput with minimal latency</li>
+          <li>Cost-effective transaction processing</li>
+          <li>Secure bridge integration with mainnet</li>
+        </ul>
+      </div>
+    </div>
+    
+    <div className="bg-blue-800/30 backdrop-blur-sm border border-blue-400/30 rounded-xl p-6">
+      <h3 className="text-xl font-bold text-white mb-4">PYUSD Boost System</h3>
+      <div className="space-y-3 text-blue-200">
+        <p>Enhanced reputation building through PYUSD stablecoin integration:</p>
+        <ul className="list-disc pl-5 space-y-2">
+          <li>Deposit PYUSD to unlock multipliers</li>
+          <li>Tiered reward system based on deposit amount</li>
+          <li>Automated level calculation and updates</li>
+          <li>Secure stablecoin smart contracts</li>
+        </ul>
+      </div>
+    </div>
+  </motion.div>
+</div>
+
+{/* CTA Section */}
+<motion.div 
+  initial={{ opacity: 0, y: 20 }}
+  animate={{ opacity: 1, y: 0 }}
+  transition={{ delay: 1.2 }}
+  className="text-center"
+>
+  <Link 
+    href="/"
+    className="inline-block bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 
+               hover:to-blue-700 text-white font-medium py-3 px-8 rounded-lg transition-all 
+               shadow-lg hover:shadow-xl"
+  >
+    Start Building Your Reputation
+  </Link>
+        </motion.div>
       </div>
 
-      {/* Architecture Components Description */}
-      <div className="max-w-7xl mx-auto mt-12 grid grid-cols-1 md:grid-cols-2 gap-8">
-        <motion.div 
-          initial={{ opacity: 0, x: -20 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.5, delay: 0.2 }}
-          className="bg-blue-900 p-6 rounded-lg"
-        >
-          <h3 className="text-xl font-bold mb-4">Quicknode Streams</h3>
-          <ul className="space-y-2">
-            <li>• Real-time blockchain data capture</li>
-            <li>• Fast and accurate transaction monitoring</li>
-            <li>• Historical data access</li>
-          </ul>
-        </motion.div>
-
-        <motion.div 
-          initial={{ opacity: 0, x: 20 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.5, delay: 0.3 }}
-          className="bg-blue-900 p-6 rounded-lg"
-        >
-          <h3 className="text-xl font-bold mb-4">Quicknode Functions</h3>
-          <ul className="space-y-2">
-            <li>• Serverless data processing</li>
-            <li>• Efficient transaction filtering</li>
-            <li>• Accurate reputation point allocation</li>
-          </ul>
-        </motion.div>
-
-        <motion.div 
-          initial={{ opacity: 0, x: -20 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.5, delay: 0.4 }}
-          className="bg-blue-900 p-6 rounded-lg"
-        >
-          <h3 className="text-xl font-bold mb-4">Reputation System</h3>
-          <ul className="space-y-2">
-            <li>• Transparent and immutable reputation tracking</li>
-            <li>• User control over on-chain credibility</li>
-            <li>• Real-time reputation updates</li>
-          </ul>
-        </motion.div>
-
-        <motion.div 
-          initial={{ opacity: 0, x: 20 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.5, delay: 0.5 }}
-          className="bg-blue-900 p-6 rounded-lg"
-        >
-          <h3 className="text-xl font-bold mb-4">Blockchain Integration</h3>
-          <ul className="space-y-2">
-            <li>• Uniswap transaction monitoring</li>
-            <li>• Real-time reputation point allocation</li>
-            <li>• On-chain activity tracking</li>
-          </ul>
-        </motion.div>
-      </div>
-
-      {/* Navigation Button */}
-      <div className="max-w-7xl mx-auto mt-12 text-center">
-        <motion.a
-          href="/"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.6 }}
-          className="inline-block bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg transition-colors"
-        >
-          Back to Home
-        </motion.a>
+      {/* Footer */}
+      <div className="w-full py-6 bg-blue-900/30 backdrop-blur-sm border-t border-blue-400/10 text-center mt-16">
+        <p className="text-blue-200 text-sm">
+          © {new Date().getFullYear()} RepCheck - Building Trust on Blockchain
+        </p>
       </div>
     </div>
   );
