@@ -42,7 +42,6 @@ const Home = () => {
   const [isDepositLoading, setIsDepositLoading] = useState(false);
   const [isDepositModalOpen, setIsDepositModalOpen] = useState(false);
   const [isLevelModalOpen, setIsLevelModalOpen] = useState(false);
-  const [time, setTime] = useState(new Date());
   
   const isSepolia = chainId === 11155111;
 
@@ -232,92 +231,133 @@ const Home = () => {
         </div>
       </div>
     </Modal>
+  );const StatsCard = ({ title, value, icon }: { title: string; value: string; icon?: React.ReactNode }) => (
+    <div className="bg-blue-800/50 rounded-xl p-6 backdrop-blur-sm border border-blue-400/30 hover:border-blue-400/50 transition-all">
+      <div className="flex items-center justify-between">
+        <div>
+          <p className="text-blue-200 text-sm mb-1">{title}</p>
+          <p className="text-2xl font-bold text-white">{value}</p>
+        </div>
+        {icon && <div className="text-blue-200">{icon}</div>}
+      </div>
+    </div>
+  );
+
+  const ActionButton = ({ onClick, icon, children, disabled = false }: { 
+    onClick: () => void; 
+    icon?: React.ReactNode; 
+    children: React.ReactNode;
+    disabled?: boolean;
+  }) => (
+    <button
+      onClick={onClick}
+      disabled={disabled}
+      className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 
+                 text-white font-medium py-3 px-6 rounded-lg w-full transition-all 
+                 flex items-center justify-center space-x-2 disabled:opacity-50 
+                 disabled:cursor-not-allowed shadow-lg hover:shadow-xl"
+    >
+      {icon && <span className="w-5 h-5">{icon}</span>}
+      <span>{children}</span>
+    </button>
   );
 
   return (
-    <div className="min-h-screen bg-darkblue flex flex-col justify-between items-center text-white">
+    <div className="min-h-screen bg-gradient-to-b from-darkblue to-blue-900 flex flex-col justify-between items-center text-white">
       {/* Header Section */}
-      <div className="w-full flex justify-between items-center py-4 px-8">
+      <div className="w-full flex justify-between items-center py-6 px-8 bg-blue-900/30 backdrop-blur-sm border-b border-blue-400/10">
         <w3m-account-button />
         <Link 
-      href="/architecture" 
-      className="text-white hover:text-blue-300 transition-colors"
-    >
-      View Architecture
-    </Link>
+          href="/architecture" 
+          className="text-blue-200 hover:text-white transition-colors"
+        >
+          View Architecture
+        </Link>
       </div>
 
       {/* Main Hero Section */}
-      <div className="text-center space-y-6 mt-0 mb-16 max-w-4xl mx-auto">
+      <div className="text-center space-y-6 mt-12 mb-16 max-w-4xl mx-auto px-4">
         <LevitatingLogo/>
-        <h1 className="text-5xl font-bold">Trust Your Chain, Build Your Name</h1>
-        <p className="text-lg text-white leading-relaxed">
+        <h1 className="text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-200 to-white">
+          Trust Your Chain, Build Your Name
+        </h1>
+        <p className="text-lg text-blue-200 leading-relaxed max-w-2xl mx-auto">
           RepCheck is your on-chain reputation sidekick—automatically tracking and rewarding your blockchain moves.
         </p>
       </div>
 
-      {/* Wallet Interaction Section */}
-      <div className="text-center mt-4 mb-16">
+      {/* Wallet Interaction Section - Redesigned */}
+      <div className="w-full max-w-4xl mx-auto px-4 mb-16">
         {!isConnected ? (
-          <div className="flex flex-col items-center">
-            <w3m-connect-button />
-            <p className="mt-4 text-lg text-white">
-              Please connect your wallet to continue.
-            </p>
+          <div className="flex flex-col items-center space-y-6 p-8 bg-blue-800/30 rounded-2xl backdrop-blur-sm border border-blue-400/30">
+            <div className="w-full max-w-md text-center space-y-4">
+              <h2 className="text-2xl font-bold text-white mb-4">Welcome to RepCheck</h2>
+              <p className="text-blue-200 mb-6">Connect your wallet to start building your on-chain reputation</p>
+              <w3m-connect-button />
+            </div>
           </div>
         ) : (
-          <div className="w-full max-w-sm mx-auto">
+          <div className="space-y-6">
             {isRegistered ? (
-              <div className="space-y-4">
-                <div className="border border-white rounded-xl p-6 bg-blue-900 shadow-lg">
-                  { !isSepolia && (
-                    <div className="flex justify-between items-center mb-4">
-                      <p className="text-white text-xl">Reputation Points:&nbsp;</p>
-                      <p className="text-white text-2xl font-bold">
-                        {displayPoints}
-                      </p>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {!isSepolia && (
+                  <StatsCard 
+                    title="Reputation Points" 
+                    value={displayPoints}
+                    icon={<span className="text-2xl">⭐</span>}
+                  />
+                )}
+                {isSepolia && (
+                  <>
+                    <StatsCard 
+                      title="Current Level" 
+                      value={`Level ${displayLevel}`}
+                      icon={<span className="text-2xl">🏆</span>}
+                    />
+                    <StatsCard 
+                      title="Multiplier" 
+                      value={`${displayLevel}x`}
+                      icon={<span className="text-2xl">✨</span>}
+                    />
+                    <div className="col-span-full md:col-span-1 flex flex-col space-y-4">
+                      <ActionButton 
+                        onClick={() => setIsLevelModalOpen(true)}
+                        icon={<span className="text-xl">📊</span>}
+                      >
+                        Check Level Status
+                      </ActionButton>
+                      <ActionButton 
+                        onClick={() => setIsDepositModalOpen(true)}
+                        icon={<img src="https://assets.coingecko.com/coins/images/31212/large/PYUSD_Logo_%282%29.png?1696530039" alt="PYUSD" className="w-5 h-5" />}
+                      >
+                        Deposit PYUSD
+                      </ActionButton>
                     </div>
-                  )}
-                  <div className="flex gap-4">
-                    { isSepolia ? (
-                      <>
-                        <button
-                          onClick={() => setIsLevelModalOpen(true)}
-                          className="bg-white hover:bg-gray-300 text-blue-800 font-bold py-2 px-4 rounded flex-1 transition-colors"
-                        >
-                         Level Check
-                        </button>
-                        <button
-                          onClick={() => setIsDepositModalOpen(true)}
-                          className="bg-white hover:bg-gray-300 text-blue-800 font-bold py-2 px-4 rounded flex-1 transition-colors relative flex items-center justify-center"
-                        >
-                          <img src="https://assets.coingecko.com/coins/images/31212/large/PYUSD_Logo_%282%29.png?1696530039" alt="Deposit Icon" className="w-8 h-8 mr-2" />
-                          Deposit
-                        </button>
-                      </>
-                    ) : null}
-                  </div>
-                </div>
+                  </>
+                )}
               </div>
             ) : (
-              isSepolia ? (
-                (
-                  <div className="border border-white rounded-xl p-8 bg-blue-900 shadow-lg space-y-6">
-                    <p className="text-white text-2xl">Connect to the RepChain for registration</p>
-                   
+              <div className="bg-blue-800/30 rounded-2xl p-8 backdrop-blur-sm border border-blue-400/30">
+                {isSepolia ? (
+                  <div className="text-center space-y-4">
+                    <p className="text-xl text-blue-200">Connect to the RepChain for registration</p>
                   </div>
-                )              ) : (
-                <div className="border border-white rounded-xl p-8 bg-blue-900 shadow-lg space-y-6">
-                  <p className="text-white text-2xl">You are not registered 🥺</p>
-                  <button
-                    onClick={handleRegister}
-                    className="bg-white hover:bg-gray-300 text-blue-800 font-bold py-2 px-4 rounded w-full transition-colors"
-                    disabled={isPending}
-                  >
-                    {isPending ? "Registering..." : "Register"}
-                  </button>
-                </div>
-              )
+                ) : (
+                  <div className="text-center space-y-4">
+                    <h3 className="text-2xl font-bold text-white">Start Your Reputation Journey</h3>
+                    <p className="text-blue-200 mb-6">Register now to begin tracking your on-chain reputation</p>
+                    <div className="max-w-md mx-auto">
+                      <ActionButton
+                        onClick={handleRegister}
+                        disabled={isPending}
+                        icon={<span className="text-xl">🚀</span>}
+                      >
+                        {isPending ? "Registering..." : "Register Now"}
+                      </ActionButton>
+                    </div>
+                  </div>
+                )}
+              </div>
             )}
           </div>
         )}
@@ -327,37 +367,37 @@ const Home = () => {
       <DepositModal />
       <LevelModal />
 
-      {/* Key Features Section */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-6xl mx-auto text-left">
-        <div className="border border-white rounded-lg p-6 bg-blue-900 shadow-lg">
-          <h3 className="text-2xl font-bold text-white mb-2">Lightning-Fast Transaction Monitoring</h3>
-          <p className="text-white">
+      {/* Key Features Section - Enhanced */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-6xl mx-auto px-4 mb-16">
+        <div className="bg-blue-800/30 rounded-xl p-6 backdrop-blur-sm border border-blue-400/30 hover:border-blue-400/50 transition-all">
+          <h3 className="text-2xl font-bold text-white mb-3">Lightning-Fast Transaction Monitoring</h3>
+          <p className="text-blue-200">
             Stay ahead with real-time on-chain activity tracking, powered by Quicknode Streams—delivering blockchain data at the speed of now.
           </p>
         </div>
-        <div className="border border-white rounded-lg p-6 bg-blue-900 shadow-lg">
-          <h3 className="text-2xl font-bold text-white mb-2">Seamless Point Attribution</h3>
-          <p className="text-white">
+        <div className="bg-blue-800/30 rounded-xl p-6 backdrop-blur-sm border border-blue-400/30 hover:border-blue-400/50 transition-all">
+          <h3 className="text-2xl font-bold text-white mb-3">Seamless Point Attribution</h3>
+          <p className="text-blue-200">
             Automatically award reputation points using Quicknode Functions to effortlessly filter and process blockchain data based on the rules.
           </p>
         </div>
-        <div className="border border-white rounded-lg p-6 bg-blue-900 shadow-lg">
-          <h3 className="text-2xl font-bold text-white mb-2">Immutable On-Chain Reputation</h3>
-          <p className="text-white">
+        <div className="bg-blue-800/30 rounded-xl p-6 backdrop-blur-sm border border-blue-400/30 hover:border-blue-400/50 transition-all">
+          <h3 className="text-2xl font-bold text-white mb-3">Immutable On-Chain Reputation</h3>
+          <p className="text-blue-200">
             Your reputation points are locked on-chain, forever transparent and secure—ensuring fairness and trust in every transaction.
           </p>
         </div>
-        <div className="border border-white rounded-lg p-6 bg-blue-900 shadow-lg">
-          <h3 className="text-2xl font-bold text-white mb-2">Effortless User Management & Logging</h3>
-          <p className="text-white">
+        <div className="bg-blue-800/30 rounded-xl p-6 backdrop-blur-sm border border-blue-400/30 hover:border-blue-400/50 transition-all">
+          <h3 className="text-2xl font-bold text-white mb-3">Effortless User Management & Logging</h3>
+          <p className="text-blue-200">
             Manage users and track events with ease. Our system ensures that every action is logged and every point is accounted for.
           </p>
         </div>
       </div>
 
       {/* Footer */}
-      <div className="w-full py-4 bg-blue-900 text-center">
-        <p className="text-white text-sm">
+      <div className="w-full py-6 bg-blue-900/30 backdrop-blur-sm border-t border-blue-400/10 text-center">
+        <p className="text-blue-200 text-sm">
           © {new Date().getFullYear()} RepCheck - Building Trust on Blockchain
         </p>
       </div>
