@@ -552,7 +552,7 @@ async function getAllRegisteredUsers() {
     const repTrackerContract = new ethers.Contract(
       contractAddress,
       abi,
-      provider
+      wallet
     );
 
     // Call the getAllUsers function from the contract
