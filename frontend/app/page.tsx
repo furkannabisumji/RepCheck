@@ -6,6 +6,7 @@ import config from "@/config.json";
 import pyusdAbi from "@/pyusdAbi.json"
 import LevitatingLogo from "./logo";
 import Link from "next/link";
+import {ethers} from "ethers";
 
 interface ModalProps {
   isOpen: boolean;
@@ -42,6 +43,16 @@ const Home = () => {
   const [isDepositLoading, setIsDepositLoading] = useState(false);
   const [isDepositModalOpen, setIsDepositModalOpen] = useState(false);
   const [isLevelModalOpen, setIsLevelModalOpen] = useState(false);
+  const [isRegisteredState, setIsRegisteredState] = useState(true);
+
+  const provider = new ethers.JsonRpcProvider("https://rpc.reponchain.com/");
+
+  const repTrackerReader = new ethers.Contract(
+    "03AdA6F4BaE36d152Fd33A3a11CA9E1feDEEeCbc",
+    config.abi,
+    provider
+  );
+  
   
   const isSepolia = chainId === 11155111;
 
@@ -161,12 +172,22 @@ const Home = () => {
     }
   }, [depositAmount, allowance, isDepositLoading]);
 
-  useEffect(() => {
-    if (isRegistered) {
-      refetchPoints();
-      refetchLevel();
+  async function registrationCheck(){
+    if(isRegistered){
+      console.log("check1")
     }
-  }, [isRegistered, refetchPoints, refetchLevel]);
+    const val = await repTrackerReader.isUserRegistered(address);
+    setIsRegisteredState(val);
+  }
+
+  useEffect(() => {
+    // Refetch all contract data when the chain ID changes
+    registrationCheck();
+    refetchPoints();
+    refetchLevel();
+    refetchAllowance();
+  }, [chainId, refetchRegistration, refetchPoints, refetchLevel, refetchAllowance]);
+
 
    const handleDepositAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
@@ -298,7 +319,7 @@ const Home = () => {
           </div>
         ) : (
           <div className="space-y-6">
-            {isRegistered ? (
+            { isRegisteredState ? (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {!isSepolia && (
                   <StatsCard 
