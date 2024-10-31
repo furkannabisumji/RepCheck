@@ -54,6 +54,8 @@ The system is built on a Solidity smart contract that handles:
 
 Repchain - https://explorer.reponchain.com/
 
+Dapp's Contract Address on Avail Roolup: 0x03AdA6F4BaE36d152Fd33A3a11CA9E1feDEEeCbc
+
 ![image](https://github.com/user-attachments/assets/7019787d-f505-4a38-ab75-a586fc723c19)
 
 
